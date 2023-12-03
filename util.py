@@ -1,9 +1,11 @@
 from __future__ import print_function
 
+import os
 import math
 import numpy as np
 import torch
 import torch.optim as optim
+from torch.utils.data import Dataset
 
 
 class TwoCropTransform:
@@ -93,3 +95,48 @@ def save_model(model, optimizer, opt, epoch, save_file):
     }
     torch.save(state, save_file)
     del state
+
+class SupervisedDataset(Dataset):
+    def __init__(self, X, y, transform):
+        self.X = X
+        self.y = y
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.y)
+
+    def __getitem__(self, index):
+        return self.transform(self.X[index]), self.y[index]
+    
+
+def load_xy(dir):
+    positives_dir = os.path.join(dir, "positives")
+    negatives_dir = os.path.join(dir, "negatives")
+
+    x_pos = np.load(os.path.join(positives_dir, "X.npy"))
+    y_pos  = np.ones(x_pos.shape[0])
+
+    x_neg = np.load(os.path.join(negatives_dir, "X.npy"))
+    y_neg = np.zeros(x_neg.shape[0])
+
+    x = np.concatenate((x_pos.astype(np.float32), x_neg.astype(np.float32))) + 128
+    y = np.concatenate((y_pos, y_neg))
+
+    return x[:100], y[:100]
+
+
+def load_dataset(dir, transform):
+
+    train_dir = os.path.join(dir, "train")
+    val_dir = os.path.join(dir, "validation")
+    test_dir = os.path.join(dir, "test")
+
+    x, y = load_xy(train_dir)
+    train_dataset = SupervisedDataset(x, y, transform=transform)
+    """
+    x, y = load_xy(val_dir)
+    val_dataset = SupervisedDataset(x, y)
+    x, y = load_xy(test_dir)
+    test_dataset = SupervisedDataset(x, y)
+    """
+    return train_dataset, None, None #val_dataset, test_dataset
