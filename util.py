@@ -132,6 +132,7 @@ def load_dataset(dir, transform):
     test_dir = os.path.join(dir, "test")
 
     x, y = load_xy(train_dir)
+    print(x.shape)
     train_dataset = SupervisedDataset(x, y, transform=transform)
     """
     x, y = load_xy(val_dir)
