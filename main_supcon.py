@@ -244,7 +244,7 @@ def train(train_loader, model, criterion, optimizer, epoch, opt):
 
         # update metric
         losses.update(loss.item(), bsz)
-        print(loss.item())
+        print(losses)
         # SGD
         optimizer.zero_grad()
         loss.backward()
