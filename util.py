@@ -122,7 +122,7 @@ def load_xy(dir):
     x = np.concatenate((x_pos.astype(np.float32), x_neg.astype(np.float32))) + 128
     y = np.concatenate((y_pos, y_neg))
 
-    return x[:100], y[:100]
+    return x, y
 
 
 def load_dataset(dir, transform):
@@ -132,7 +132,6 @@ def load_dataset(dir, transform):
     test_dir = os.path.join(dir, "test")
 
     x, y = load_xy(train_dir)
-    print(x.shape)
     train_dataset = SupervisedDataset(x, y, transform=transform)
     """
     x, y = load_xy(val_dir)
