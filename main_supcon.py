@@ -31,15 +31,15 @@ def parse_option():
                         help='print frequency')
     parser.add_argument('--save_freq', type=int, default=50,
                         help='save frequency')
-    parser.add_argument('--batch_size', type=int, default=256,
+    parser.add_argument('--batch_size', type=int, default=512,
                         help='batch_size')
     parser.add_argument('--num_workers', type=int, default=16,
                         help='num of workers to use')
-    parser.add_argument('--epochs', type=int, default=200,
+    parser.add_argument('--epochs', type=int, default=1000,
                         help='number of training epochs')
 
     # optimization
-    parser.add_argument('--learning_rate', type=float, default=0.05,
+    parser.add_argument('--learning_rate', type=float, default=0.1,
                         help='learning rate')
     parser.add_argument('--lr_decay_epochs', type=str, default='700,800,900',
                         help='where to decay lr, can be a list')
