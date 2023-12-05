@@ -166,7 +166,7 @@ def train(train_loader, model, classifier, criterion, optimizer, epoch, opt):
         losses.update(loss.item(), bsz)
         if opt.n_cls < 10:
             acc1 = accuracy(output, labels)
-            print(acc1)
+            print(acc1[0])
             exit()
         else:
             acc1, acc5 = accuracy(output, labels, topk=(1, 5))
