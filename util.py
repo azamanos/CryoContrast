@@ -114,10 +114,10 @@ def load_xy(dir):
     negatives_dir = os.path.join(dir, "negatives")
 
     x_pos = np.load(os.path.join(positives_dir, "X.npy"))
-    y_pos  = np.ones(x_pos.shape[0])
+    y_pos  = np.ones(x_pos.shape[0], dtype=np.float32)
 
     x_neg = np.load(os.path.join(negatives_dir, "X.npy"))
-    y_neg = np.zeros(x_neg.shape[0])
+    y_neg = np.zeros(x_neg.shape[0], dtype=np.float32)
 
     x = np.concatenate((x_pos.astype(np.float32), x_neg.astype(np.float32))) + 128
     y = np.concatenate((y_pos, y_neg))
