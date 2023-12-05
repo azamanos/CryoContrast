@@ -150,6 +150,7 @@ def train(train_loader, model, classifier, criterion, optimizer, epoch, opt):
 
         images = images.cuda(non_blocking=True)
         labels = labels.cuda(non_blocking=True)
+        labels=labels.to(torch.int64)
         bsz = labels.shape[0]
 
         # warm-up learning rate
