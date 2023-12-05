@@ -48,9 +48,10 @@ def parse_option():
                         help='momentum')
 
     # model dataset
-    parser.add_argument('--model', type=str, default='resnet50')
+    parser.add_argument('--model', type=str, default='resnet18')
     parser.add_argument('--dataset', type=str, default='cifar10',
-                        choices=['cifar10', 'cifar100'], help='dataset')
+                        choices=['cifar10', 'cifar100', "particle_binary"], help='dataset')
+    parser.add_argument('--data_folder', type=str, default=None, help='path to custom dataset')
 
     # other setting
     parser.add_argument('--cosine', action='store_true',
@@ -64,8 +65,9 @@ def parse_option():
     opt = parser.parse_args()
 
     # set the path according to the environment
-    opt.data_folder = './datasets/'
-
+    if opt.data_folder is None:
+        opt.data_folder = './datasets/'
+    
     iterations = opt.lr_decay_epochs.split(',')
     opt.lr_decay_epochs = list([])
     for it in iterations:
@@ -94,6 +96,8 @@ def parse_option():
         opt.n_cls = 10
     elif opt.dataset == 'cifar100':
         opt.n_cls = 100
+    elif opt.dataset == "particle_binary":
+        opt.n_cls = 2
     else:
         raise ValueError('dataset not supported: {}'.format(opt.dataset))
 

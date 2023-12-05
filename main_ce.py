@@ -11,7 +11,7 @@ import torch
 import torch.backends.cudnn as cudnn
 from torchvision import transforms, datasets
 
-from util import AverageMeter
+from util import AverageMeter, load_dataset
 from util import adjust_learning_rate, warmup_learning_rate, accuracy
 from util import set_optimizer, save_model
 from networks.resnet_big import SupCEResNet
@@ -53,6 +53,7 @@ def parse_option():
     parser.add_argument('--model', type=str, default='resnet50')
     parser.add_argument('--dataset', type=str, default='cifar10',
                         choices=['cifar10', 'cifar100'], help='dataset')
+    parser.add_argument('--data_folder', type=str, default=None, help='path to custom dataset')
 
     # other setting
     parser.add_argument('--cosine', action='store_true',
@@ -67,7 +68,8 @@ def parse_option():
     opt = parser.parse_args()
 
     # set the path according to the environment
-    opt.data_folder = './datasets/'
+    if opt.data_folder is None:
+        opt.data_folder = './datasets/'
     opt.model_path = './save/SupCon/{}_models'.format(opt.dataset)
     opt.tb_path = './save/SupCon/{}_tensorboard'.format(opt.dataset)
 
@@ -123,6 +125,9 @@ def set_loader(opt):
     elif opt.dataset == 'cifar100':
         mean = (0.5071, 0.4867, 0.4408)
         std = (0.2675, 0.2565, 0.2761)
+    elif opt.dataset == "particle_binary":
+        mean = (102.02148)
+        std = (22.57589)
     else:
         raise ValueError('dataset not supported: {}'.format(opt.dataset))
     normalize = transforms.Normalize(mean=mean, std=std)
@@ -153,6 +158,12 @@ def set_loader(opt):
         val_dataset = datasets.CIFAR100(root=opt.data_folder,
                                         train=False,
                                         transform=val_transform)
+    elif opt.dataset == "particle_binary":
+        train_transform = transforms.Compose([
+        transforms.ToTensor(),
+        normalize,
+        ])
+        train_dataset, _, val_dataset = load_dataset(opt.data_folder, transform=train_transform)
     else:
         raise ValueError(opt.dataset)
 
