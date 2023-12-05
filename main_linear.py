@@ -168,9 +168,8 @@ def train(train_loader, model, classifier, criterion, optimizer, epoch, opt):
             acc1 = accuracy(output, labels)
         else:
             acc1, acc5 = accuracy(output, labels, topk=(1, 5))
-        top1.update(acc1[0], bsz)
-        print(top1.avg)
-        exit()
+        top1.update(acc1[0].item(), bsz)
+        
         # SGD
         optimizer.zero_grad()
         loss.backward()
