@@ -133,10 +133,11 @@ def load_dataset(dir, transform):
 
     x, y = load_xy(train_dir)
     train_dataset = SupervisedDataset(x, y, transform=transform)
-    """
-    x, y = load_xy(val_dir)
-    val_dataset = SupervisedDataset(x, y)
+    
+    #x, y = load_xy(val_dir)
+    #val_dataset = SupervisedDataset(x, y)
+    
     x, y = load_xy(test_dir)
     test_dataset = SupervisedDataset(x, y)
-    """
-    return train_dataset, None, None #val_dataset, test_dataset
+    
+    return train_dataset, None, test_dataset
