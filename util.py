@@ -135,9 +135,9 @@ def load_dataset(dir, transform):
     train_dataset = SupervisedDataset(x, y, transform=transform)
     
     #x, y = load_xy(val_dir)
-    #val_dataset = SupervisedDataset(x, y)
+    #val_dataset = SupervisedDataset(x, y, transform=transform)
     
     x, y = load_xy(test_dir)
-    test_dataset = SupervisedDataset(x, y)
+    test_dataset = SupervisedDataset(x, y, transform=transform)
     
     return train_dataset, None, test_dataset
