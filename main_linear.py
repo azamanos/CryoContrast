@@ -166,10 +166,12 @@ def train(train_loader, model, classifier, criterion, optimizer, epoch, opt):
         losses.update(loss.item(), bsz)
         if opt.n_cls < 10:
             acc1 = accuracy(output, labels)
+            print(acc1)
+            exit()
         else:
             acc1, acc5 = accuracy(output, labels, topk=(1, 5))
         top1.update(acc1[0], bsz)
-
+        
         # SGD
         optimizer.zero_grad()
         loss.backward()
