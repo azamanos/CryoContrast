@@ -169,7 +169,7 @@ def train(train_loader, model, classifier, criterion, optimizer, epoch, opt):
         else:
             acc1, acc5 = accuracy(output, labels, topk=(1, 5))
         top1.update(acc1[0].item(), bsz)
-        
+
         # SGD
         optimizer.zero_grad()
         loss.backward()
@@ -206,6 +206,7 @@ def validate(val_loader, model, classifier, criterion, opt):
         end = time.time()
         for idx, (images, labels) in enumerate(val_loader):
             images = images.float().cuda()
+            labels=labels.to(torch.int64)
             labels = labels.cuda()
             bsz = labels.shape[0]
 
@@ -215,8 +216,11 @@ def validate(val_loader, model, classifier, criterion, opt):
 
             # update metric
             losses.update(loss.item(), bsz)
-            acc1, acc5 = accuracy(output, labels, topk=(1, 5))
-            top1.update(acc1[0], bsz)
+            if opt.n_cls < 10:
+                acc1 = accuracy(output, labels)
+            else:
+                acc1, acc5 = accuracy(output, labels, topk=(1, 5))
+            top1.update(acc1[0].item(), bsz)
 
             # measure elapsed time
             batch_time.update(time.time() - end)
